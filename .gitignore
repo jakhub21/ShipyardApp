@@ -1,0 +1,141 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+*.env
+*.venv
+*.virtualenv
+
+# Django specific
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.migrations/
+
+# Static and media files
+/staticfiles/
+/media/
+
+# Environment variables
+.env
+.env.*
+
+# Local development configurations
+*.local_settings.py
+config/settings/local.py
+settings_local.py
+
+# macOS specific
+.DS_Store
+
+# PyCharm project files
+.idea/
+
+# VS Code settings
+.vscode/
+
+# JetBrains project files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Compiled C extensions
+*.so
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# MySQL/MariaDB database dumps
+*.sql
+
+# Logs
+*.log
+logs/
+*.out
+*.err
+
+# Coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+.cache
+.pytest_cache/
+.installed.cfg
+__pypackages__/
+
+# Sphinx documentation
+docs/_build/
+
+# pytest
+.pytest_cache/
+
+# pyenv
+.python-version
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot

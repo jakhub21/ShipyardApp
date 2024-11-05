@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Shipyard Management System</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'employee_list' %}">View Employees</a></li>
+            <!-- Add more buttons to other views -->
+        </ul>
+    </nav>
+{% endblock %}

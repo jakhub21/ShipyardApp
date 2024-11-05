@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Employee List
+{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for employee in employees %}
+            <li> <a href="{{ employee.get_absolute_url }}">{{ employee.first_name }} {{ employee.last_name }} | {{ employee.status }} | {{ employee.position }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ firstname }} {{ lastname }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ firstname }} {{ lastname }}</h1>
+    <p>{{ personal_number }}</p>
+    <p>{{ phone_number }}</p>
+    <p>{{ bank_account_number }}</p>
+    <p>{{ address }}</p>
+    <p>{{ contact_person }}</p>
+    <p>{{ position }}</p>
+    {% for project in projects%}
+        <p>{{ project }}</p>
+    {% endfor %}
+    <p>{{ status }}</p>
+{% endblock %}
