@@ -6,6 +6,8 @@
 {% endblock %}
 
 {% block content %}
+    <h1>Employee List</h1>
+    <a href="{% url 'employee_create' %}" class="btn btn-success">Create new employee</a>
     <ul>
         {% for employee in employees %}
             <li> <a href="{{ employee.get_absolute_url }}">{{ employee.first_name }} {{ employee.last_name }} | {{ employee.status }} | {{ employee.position }}</li>

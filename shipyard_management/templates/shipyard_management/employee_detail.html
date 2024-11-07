@@ -7,14 +7,12 @@
 
 {% block content %}
     <h1>{{ firstname }} {{ lastname }}</h1>
-    <p>{{ personal_number }}</p>
-    <p>{{ phone_number }}</p>
-    <p>{{ bank_account_number }}</p>
-    <p>{{ address }}</p>
-    <p>{{ contact_person }}</p>
-    <p>{{ position }}</p>
-    {% for project in projects%}
-        <p>{{ project }}</p>
-    {% endfor %}
-    <p>{{ status }}</p>
+    <p>Numer personalny: {{ personal_number }}</p>
+    <p>Numer telefonu: {{ phone_number }}</p>
+    <p>Numer konta bankowego: {{ bank_account_number }}</p>
+    <p>Adres: {{ address }}</p>
+    <p>Osoba kontaktowa: {{ contact_person }}</p>
+    <p>Zawód: {{ position }}</p>
+    <p>Projekt: {{ projects }}</p>
+    <p>Status: {{ status }}</p>
 {% endblock %}

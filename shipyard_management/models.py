@@ -14,14 +14,14 @@ class Address(models.Model):
         return f"{self.street} {self.house_number}, {self.city} {self.postal_code}"
     
 class ContactPerson(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
-    phone_number = models.CharField(max_length=15)
+    contact_first_name = models.CharField(max_length=100)
+    contact_last_name = models.CharField(max_length=100)
+    contact_email = models.EmailField(max_length=100)
+    contact_phone_number = models.CharField(max_length=15)
     relation_to_employee = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.contact_first_name} {self.contact_last_name}"
     
 class Position(models.Model):
     title = models.CharField(max_length=100)
@@ -35,6 +35,10 @@ class Project(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=50)
+    slug = models.SlugField(default="", blank=True, null=False, db_index=True)
+
+    def get_absolute_url(self):
+        return reverse("project_detail", args=[self.slug])
 
     def __str__(self):
         return self.name
@@ -48,7 +52,7 @@ class Employee(models.Model):
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     contact_person = models.ForeignKey(ContactPerson, on_delete=models.SET_NULL, null=True)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
-    projects = models.ManyToManyField(Project, blank=True)
+    projects = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=20)
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)
 
@@ -56,8 +60,8 @@ class Employee(models.Model):
         return reverse("employee_detail", args=[self.slug])
     
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} | status: {self.status} | zawód: {self.position}"
+    # def __str__(self):
+    #     return f"{self.first_name} {self.last_name} | status: {self.status} | zawód: {self.position}"
     
 class Certificate(models.Model):
     name = models.CharField(max_length=100)

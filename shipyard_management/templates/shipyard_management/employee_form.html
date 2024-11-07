@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Create new worker</h2>
+  <form method="post">
+    {% csrf_token %}
+    <h3>Employee Details</h3>
+    {{ employee_form.as_p }}
+
+    <h3>Address Details</h3>
+    {{ address_form.as_p }}
+
+    <h3>Contact Person Details</h3>
+    {{ contact_person_form.as_p }}
+    <button type="submit">Create new worker</button>
+  </form>
+{% endblock %}

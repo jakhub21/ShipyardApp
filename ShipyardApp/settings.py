@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'members',
     'shipyard_management',
     'django.contrib.admin',
     'django.contrib.auth',

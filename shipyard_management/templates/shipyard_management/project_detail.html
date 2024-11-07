@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ name }} 
+{% endblock %}
+
+{% block content %}
+    <h1>{{ name }}</h1>
+    <p>Opis: {{ description }}</p>
+    <p>Data rozpoczęcia: {{ start_date }}</p>
+    <p>Data zakończenia: {{ end_date }}</p>
+    <p>Status: {{ status }}</p>
+    <h2>Pracownicy przypisani do projektu {{ name }}</h2>
+
+    <ul>
+        {% for employee in employees %}
+            <li><a href="{{ employee.get_absolute_url }}"></a>{{ employee.first_name }} {{ employee.last_name }}</a></li>
+        {% empty %}
+            <li>Brak pracowników przypisanych do projektu</li> 
+        {% endfor %}
+    </ul>
+{% endblock %}
