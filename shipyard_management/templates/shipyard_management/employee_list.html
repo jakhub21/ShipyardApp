@@ -10,8 +10,17 @@
     <a href="{% url 'employee_create' %}" class="btn btn-success">Create new employee</a>
     <ul>
         {% for employee in employees %}
-            <li> <a href="{{ employee.get_absolute_url }}">{{ employee.first_name }} {{ employee.last_name }} | {{ employee.status }} | {{ employee.position }}</li>
+            <li> <a href="{{ employee.get_absolute_url }}">{{ employee.first_name }} {{ employee.last_name }} | {{ employee.status }} | {{ employee.position }} | 
+                <a href="{% url 'edit_employee' employee.slug %}" class="btn btn-primary">Edit</a> 
+                <button onclick="confirmDelete('{{ employee.slug }}')" class="btn btn-danger">Delete</button></li>
         {% endfor %}
     </ul>
 {% endblock %}
+<script>
+    function confirmDelete(deleteUrl) {
+        if (confirm("Are you sure you want to delete this employee?")) {
+            window.location.href = deleteUrl;
+        }
+    }
+</script>
 

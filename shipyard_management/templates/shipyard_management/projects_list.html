@@ -8,7 +8,7 @@
     <a href="{% url 'project_create' %}" class="btn btn-success">Create new project</a> 
     <ul>
         {% for project in projects %}
-            <li><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></li>
+            <li><a href="{{ project.get_absolute_url }}">{{ project.name }}</a>  <a href="{% url 'edit_project' project.slug %}" class="btn btn-primary">Edit</a> </li>
         {% endfor %}
     </ul>
 {% endblock %}
