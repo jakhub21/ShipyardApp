@@ -6,6 +6,7 @@
     <form action="" method="POST" class="form-group">
         {% csrf_token %}
         {{ form }}
+        <p>Have an account? <a href='/login'>Login</a></p>
         <button type="submit" class="btn btn-success">Register</button>
     </form>
 {% endblock %}

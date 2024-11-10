@@ -5,10 +5,36 @@
     
 {% block content %}
     <h1>Projects</h1>
+    <form method="GET" action="{% url 'projects_list' %}" id="search-form">
+        <input type="text" name="q" id="search-input" placeholder="Search by name..." value="{{ query|default_if_none:'' }}">
+    </form>
     <a href="{% url 'project_create' %}" class="btn btn-success">Create new project</a> 
     <ul>
         {% for project in projects %}
-            <li><a href="{{ project.get_absolute_url }}">{{ project.name }}</a>  <a href="{% url 'edit_project' project.slug %}" class="btn btn-primary">Edit</a> </li>
+            <li>
+                <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>  
+                <a href="{% url 'edit_project' project.slug %}" class="btn btn-primary">Edit</a> 
+                <button onclick="confirmDelete('{{ project.slug }}')" class="btn btn-danger">Delete</button>
+            </li>
+        {% empty %}
+            <li>No projects found</li>
         {% endfor %}
     </ul>
+
+    <script>
+        let timeout = null;
+
+        document.getElementById('search-input').addEventListener('input', function () {
+            clearTimeout(timeout); 
+            timeout = setTimeout(function () {
+                document.getElementById('search-form').submit();  /
+            }, 500);  
+        });
+
+        function confirmDelete(deleteUrl) {
+            if (confirm("Are you sure you want to delete this project?")) {
+                window.location.href = deleteUrl;
+            }
+        }
+    </script>
 {% endblock %}

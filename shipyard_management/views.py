@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Employee, Project
 from .forms import ProjectForm, EmployeeForm, AddressForm, ContactPersonForm
+from django.db.models import Q
 
 
 
@@ -11,9 +12,17 @@ def home(request):
     return render(request, 'shipyard_management/home.html')
 
 def employee_list(request):
-    employees = Employee.objects.all()
+    query = request.GET.get('q')
+    if query:
+        employees = Employee.objects.filter(
+            Q(first_name__icontains=query) | Q(last_name__icontains=query)
+        )
+    else:
+        employees = Employee.objects.all()
+
     return render(request, 'shipyard_management/employee_list.html', {
-        'employees': employees
+        'employees': employees,
+        'query': query
         })
 
 def employee_detail(request, slug):
@@ -76,10 +85,17 @@ def delete_employee(request, slug):
     return redirect('employee_list')
 
 def projects_list(request):
-    projects = Project.objects.all()
+    query = request.GET.get('q')
+    if query:
+        projects = Project.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+    else:
+        projects = Project.objects.all()
 
     return render(request, 'shipyard_management/projects_list.html', {
-        'projects': projects
+        'projects': projects,
+        'query': query
         })
 
 
