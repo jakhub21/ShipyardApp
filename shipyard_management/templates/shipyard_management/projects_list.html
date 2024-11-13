@@ -14,7 +14,10 @@
             <li>
                 <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>  
                 <a href="{% url 'edit_project' project.slug %}" class="btn btn-primary">Edit</a> 
-                <button onclick="confirmDelete('{{ project.slug }}')" class="btn btn-danger">Delete</button>
+                <form action="{% url 'delete_project' project.slug %}" method="POST" style="display:inline;" class="delete-form">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
             </li>
         {% empty %}
             <li>No projects found</li>
@@ -31,10 +34,13 @@
             }, 500);  
         });
 
-        function confirmDelete(deleteUrl) {
-            if (confirm("Are you sure you want to delete this project?")) {
-                window.location.href = deleteUrl;
-            }
-        }
+        document.querySelectorAll('.delete-form').forEach(form => {
+            form.addEventListener('submit', function (event) {
+                const confirmed = confirm('Do you want to delete this project?');
+                if (!confirmed) {
+                    event.preventDefault(); 
+                }
+            });
+        });
     </script>
 {% endblock %}

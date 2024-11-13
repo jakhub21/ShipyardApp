@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Employee, Project
 from .forms import ProjectForm, EmployeeForm, AddressForm, ContactPersonForm
 from django.db.models import Q
+from django.http import HttpResponseNotAllowed
+from django.contrib import messages
 
 
 
@@ -80,9 +82,11 @@ def edit_employee(request, slug):
     return render(request, 'shipyard_management/edit_employee.html', {'form': form})
 
 def delete_employee(request, slug):
-    employee = get_object_or_404(Employee, slug=slug)
-    employee.delete()
-    return redirect('employee_list')
+    if request.method == 'POST':
+        employee = get_object_or_404(Employee, slug=slug)
+        employee.delete()
+        return redirect('employee_list')
+    return HttpResponseNotAllowed(['POST'])
 
 def projects_list(request):
     query = request.GET.get('q')
@@ -97,8 +101,6 @@ def projects_list(request):
         'projects': projects,
         'query': query
         })
-
-
 
 def project_detail(request, slug):
     project = get_object_or_404(Project, slug=slug)
@@ -134,3 +136,9 @@ def edit_project(request, slug):
         form = ProjectForm(instance=project)
     
     return render(request, 'shipyard_management/edit_project.html', {'form': form})
+
+def delete_project(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    project.delete()
+    messages.success(request, f"Projekt '{project.name}' został usunięty.")
+    return redirect("projects_list")
