@@ -4,11 +4,8 @@ from .forms import ProjectForm, EmployeeForm, AddressForm, ContactPersonForm
 from django.db.models import Q
 from django.http import HttpResponseNotAllowed
 from django.contrib import messages
+from django.core.serializers import serialize
 
-
-
-
-# Create your views here.
 
 def home(request):
     return render(request, 'shipyard_management/home.html')
@@ -135,10 +132,18 @@ def edit_project(request, slug):
     else:
         form = ProjectForm(instance=project)
     
-    return render(request, 'shipyard_management/edit_project.html', {'form': form})
+    return render(request, 'shipyard_management/edit_project.html', {
+        'form': form,
+        'project': project
+        })
 
 def delete_project(request, slug):
     project = get_object_or_404(Project, slug=slug)
     project.delete()
     messages.success(request, f"Projekt '{project.name}' został usunięty.")
     return redirect("projects_list")
+
+def map_view(request):
+    projects = Project.objects.filter(latitude__isnull=False, longitude__isnull=False)
+    projects_json = serialize('json', projects)
+    return render(request, 'shipyard_management/map.html', {'projects': projects_json})

@@ -1,7 +1,5 @@
 from django.db import models
-from django.urls import reverse
-
-# Create your models here.
+from django.urls import reverse 
 
 class Address(models.Model):
     street = models.CharField(max_length=100)
@@ -35,6 +33,8 @@ class Project(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=50)
+    latitude = models.FloatField(null=True, blank=True) 
+    longitude = models.FloatField(null=True, blank=True) 
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)
 
     def get_absolute_url(self):

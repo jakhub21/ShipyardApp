@@ -4,7 +4,7 @@ from .models import Project, Employee, Address, ContactPerson
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'description', 'start_date', 'end_date', 'status', 'slug']
+        fields = ['name', 'description', 'start_date', 'end_date', 'status', 'latitude', 'longitude', 'slug']
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
