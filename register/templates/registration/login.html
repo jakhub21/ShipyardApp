@@ -1,15 +1,18 @@
 {% extends "base_log.html" %}
+{% load static %}
 
 {% block title %}
-    <title>Log in</title>
+    Log in
 {% endblock %}
 
 {% block content %}
-    <h2>Log in</h2>
-    <form method="post" class="form-group">
+<div class="login-panel">
+    <h2>Login</h2>
+    <form method="post">
         {% csrf_token %}
-        {{ form }}
-        <p>Don't have an account? <a href='/register'>Register</a></p>
-        <button type="submit" class="btn btn-success">Log in</button>
+        <input type="text" name="username" placeholder="Username">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Sign in</button>
     </form>
+</div>
 {% endblock %}

@@ -2,27 +2,46 @@
 {% load static %}
 
 {% block title %}Projects{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'shipyard_management/project_list.css' %}">
+{% endblock %}
     
 {% block content %}
-    <h1>Projects</h1>
+    <h1 class="main-text">Projects</h1>
+
     <form method="GET" action="{% url 'projects_list' %}" id="search-form">
         <input type="text" name="q" id="search-input" placeholder="Search by name..." value="{{ query|default_if_none:'' }}">
     </form>
-    <a href="{% url 'project_create' %}" class="btn btn-success">Create new project</a> 
-    <ul>
-        {% for project in projects %}
-            <li>
-                <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>  
-                <a href="{% url 'edit_project' project.slug %}" class="btn btn-primary">Edit</a> 
-                <form action="{% url 'delete_project' project.slug %}" method="POST" style="display:inline;" class="delete-form">
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        {% empty %}
-            <li>No projects found</li>
-        {% endfor %}
-    </ul>
+
+    <a href="{% url 'project_create' %}" class="btn btn-create">Create new project</a> 
+
+    <table class="project-table">
+        <thead>
+            <tr>
+                <th class="name">Project Name</th>
+                <th class="actions">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.name }}</td>
+                    <td>
+                        <a href="{% url 'edit_project' project.slug %}" class="btn-edit">Edit</a> 
+                        <form action="{% url 'delete_project' project.slug %}" method="POST" style="display:inline;" class="delete-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">No projects found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
 
     <script>
         let timeout = null;

@@ -1,0 +1,64 @@
+.main-text {
+    font-size: 30px;
+    margin-bottom: 20px;
+    color: #0B2F9F;
+}
+
+.project-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.project-table th, .project-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.project-table th {
+    background-color: #0B2F9F;
+    color: white;
+}
+
+.project-table th.name, 
+.project-table td.name {
+    width: 80%;
+}
+
+.project-table th.actions, 
+.project-table td.actions {
+    width: 20%;
+}
+
+.btn-create {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #98DED9;
+    color: #0B2F9F;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-edit {
+    color: #0B2F9F;
+    text-decoration: none;
+    padding: 5px 10px;
+    background-color: #98DED9;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.btn-delete {
+    background-color: #EF4444;
+    text-decoration: none;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}

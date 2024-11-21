@@ -1,0 +1,142 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.main-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #0B2F9F;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    height: calc(100vh - 40px);
+    border-radius: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+    
+}
+
+.sidebar .nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar .nav li {
+    margin: 10px 0;
+    width: auto;
+}
+
+.sidebar .nav a {
+    display: flex; 
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 6px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; 
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+.sidebar .nav a:hover {
+    background-color: #98DED9; 
+    color: #0B2F9F; 
+}
+
+
+.sidebar .nav svg {
+    width: 35px; 
+    height: 35px;
+    padding: 8px 0 8px 0; 
+    display: inline-block; 
+    vertical-align: middle; 
+    filter: invert(99%) sepia(1%) saturate(4%) hue-rotate(269deg) brightness(104%) contrast(100%);
+    transition: filter 0.3s ease; 
+    
+}
+
+.sidebar .nav .nav-icon{
+    width: 35px; 
+    height: 35px;
+    margin-right: 20px; 
+    filter: invert(99%) sepia(1%) saturate(4%) hue-rotate(269deg) brightness(104%) contrast(100%);
+}
+
+.sidebar .nav a:hover .nav-icon {
+    filter: invert(19%) sepia(53%) saturate(2947%) hue-rotate(206deg) brightness(97%) contrast(99%);
+}
+
+.sidebar .footer a {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 20px; 
+}
+
+.sidebar .footer a:hover {
+    background-color: #98DED9;
+    color: #0B2F9F;
+}
+
+.sidebar .footer svg {
+    width: 35px; 
+    height: 35px;
+    padding: 8px 0 8px 0; 
+    display: inline-block; 
+    vertical-align: middle; 
+    filter: invert(99%) sepia(1%) saturate(4%) hue-rotate(269deg) brightness(104%) contrast(100%);
+    transition: filter 0.3s ease; 
+    
+}
+
+.sidebar .footer .nav-icon {
+    width: 35px; 
+    height: 35px;
+    margin-right: 20px; 
+    filter: invert(99%) sepia(1%) saturate(4%) hue-rotate(269deg) brightness(104%) contrast(100%);
+}
+
+.sidebar .footer a:hover .nav-icon {
+    filter: invert(19%) sepia(53%) saturate(2947%) hue-rotate(206deg) brightness(97%) contrast(99%);
+}
+
+.content {
+    flex-grow: 1;
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.topbar {
+    position: fixed; 
+    top: 20px;
+    right: 20px; 
+    background-color: #0B2F9F; 
+    color: white; 
+    padding: 10px 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    font-size: 1rem; 
+    z-index: 1000; 
+}
+
+.topbar .username {
+    font-weight: bold;
+}
+
+

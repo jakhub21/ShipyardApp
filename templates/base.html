@@ -6,27 +6,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'app.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'home' %}">Home</a>
-            <a href="{% url 'employee_list' %}">Employees</a>
-            <a href="{% url 'projects_list' %}">Projects</a>
-            <a href="{% url 'map_view' %}">Projects Map</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'register' %}">Register</a>
-            {% endif %}
-        </nav>
-    </header>
-    {% if user.is_authenticated %}
-        {% block content %}{% endblock %}
-    {% else %}
-        <h1>You are not logged in</h1>
-        <a href="{% url 'login' %}">Login</a>
-    {% endif %}
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="nav">
+                <li>
+                    <a href="{% url 'home' %}">
+                        <svg class="icon">
+                            <img src="{% static 'icons/home.svg' %}" alt="Home Icon" class="nav-icon" width="35" height="35">
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'employee_list' %}">
+                        <svg class="icon">
+                            <img src="{% static 'icons/employees.svg' %}" alt="Employees Icon" class="nav-icon" width="35" height="35">
+                        </svg>
+                        Employees
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'projects_list' %}">
+                        <svg class="icon">
+                            <img src="{% static 'icons/projects.svg' %}" alt="Projects Icon" class="nav-icon" width="35" height="35">
+                        </svg>
+                        Projects
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'map_view' %}">
+                        <svg class="icon">
+                            <img src="{% static 'icons/map.svg' %}" alt="Map Icon" class="nav-icon" width="35" height="35">
+                        </svg>
+                        Map
+                    </a>
+                </li>
+            </ul>
+            <div class="footer">
+                {% comment %} <a href="{% url 'settings' %}">Settings</a> {% endcomment %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}">
+                        <svg class="icon">
+                            <img src="{% static 'icons/logout.svg' %}" alt="Logout Icon" class="nav-icon" width="35" height="35">
+                        </svg>
+                        Log out
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}">
+                        <svg class="icon">
+                            <img src="{% static 'icons/login.svg' %}" alt="Login Icon" class="nav-icon" width="35" height="35">
+                        </svg>
+                        Log in
+                    </a>
+                {% endif %}
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="topbar">
+                {% if user.is_authenticated %}
+                    <span class="username">Username: {{ user.username }}</span>
+                {% else %}
+                    <span class="username">You have to login</span>
+                {% endif %}
+            </header>
+            <section>
+                {% if user.is_authenticated %}
+                    {% block content %}{% endblock %}
+                {% else %}
+                    <h1>You are not logged in</h1>
+                    <a href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </section>
+        </main>
+    </div>
 </body>
 </html>
