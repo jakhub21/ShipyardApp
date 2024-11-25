@@ -1,17 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Create new worker</h2>
-  <form method="post">
-    {% csrf_token %}
-    <h3>Employee Details</h3>
-    {{ employee_form.as_p }}
+  <div class="edit-employee-container">
+      <h2 class="edit-employee-title">Create New Worker</h2>
+      <form method="post" class="employee-form">
+          {% csrf_token %}
 
-    <h3>Address Details</h3>
-    {{ address_form.as_p }}
+          <div class="section-title">Employee Details</div>
+          <div class="form-group">
+              {{ employee_form.as_p }}
+          </div>
 
-    <h3>Contact Person Details</h3>
-    {{ contact_person_form.as_p }}
-    <button type="submit">Create new worker</button>
-  </form>
+          <div class="section-title">Address Details</div>
+          <div class="form-group">
+              {{ address_form.as_p }}
+          </div>
+
+          <div class="section-title">Contact Person Details</div>
+          <div class="form-group">
+              {{ contact_person_form.as_p }}
+          </div>
+
+          <div class="form-actions">
+              <button type="submit" class="btn-primary">Create New Worker</button>
+          </div>
+      </form>
+  </div>
 {% endblock %}
