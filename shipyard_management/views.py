@@ -68,15 +68,29 @@ def create_employee(request):
 
 def edit_employee(request, slug):
     employee = get_object_or_404(Employee, slug=slug)
+    address = employee.address
+    contact = employee.contact_person
+
     if request.method == 'POST':
         form = EmployeeForm(request.POST, instance=employee)
-        if form.is_valid():
+        address_form = AddressForm(request.POST, instance=address)
+        contact_form = ContactPersonForm(request.POST, instance=contact)
+
+        if form.is_valid() and address_form.is_valid() and contact_form.is_valid():
             form.save()
-            return redirect('employee_list')  
+            address_form.save()
+            contact_form.save()
+            return redirect('employee_list') 
     else:
         form = EmployeeForm(instance=employee)
-    
-    return render(request, 'shipyard_management/edit_employee.html', {'form': form})
+        address_form = AddressForm(instance=address)
+        contact_form = ContactPersonForm(instance=contact)
+
+    return render(request, 'shipyard_management/edit_employee.html', {
+        'form': form,
+        'address_form': address_form,
+        'contact_form': contact_form,
+    })
 
 def delete_employee(request, slug):
     if request.method == 'POST':

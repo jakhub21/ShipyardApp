@@ -5,11 +5,40 @@
     Edit Employee
 {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{% static 'shipyard_management/employee_edit.css' %}">
+{% endblock %}
+
 {% block content %}
-    <h1>Edit Employee</h1>
-    <form method="post">
+<div class="edit-employee-container">
+    <h1 class="edit-employee-title">Edit Employee</h1>
+
+    <form method="post" class="edit-employee-form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Save</button>
+        <section class="employee-details">
+            <h2 class="section-title">Employee Details</h2>
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+        </section>
+
+        <section class="address-details">
+            <h2 class="section-title">Address</h2>
+            <div class="form-group">
+                {{ address_form.as_p }}
+            </div>
+        </section>
+
+        <section class="contact-details">
+            <h2 class="section-title">Contact Details</h2>
+            <div class="form-group">
+                {{ contact_form.as_p }}
+            </div>
+        </section>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
     </form>
+</div>
 {% endblock %}
