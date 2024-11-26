@@ -9,7 +9,7 @@
 <div class="home-container">
     <h1 class="home-title">Shipyard Management System</h1>
     <div class="home-sections">
-        <div class="employees-section">
+        <a href="{% url 'employee_list' %}" class="employees-section clickable-section">
             <h2>Employees:</h2>
             <ul>
                 {% for employee in employees %}
@@ -19,9 +19,9 @@
             {% if employees|length > 5 %}
                 <p>...and more</p>
             {% endif %}
-        </div>
+        </a>
 
-        <div class="projects-section">
+        <a href="{% url 'projects_list' %}" class="projects-section clickable-section">
             <h2>Projects:</h2>
             <ul>
                 {% for project in projects %}
@@ -31,18 +31,18 @@
             {% if projects|length > 5 %}
                 <p>...and more</p>
             {% endif %}
-        </div>
+        </a>
     </div>
-</div>
-<div id="map" style="height: 400px; margin-top: 20px;"></div>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <div id="map" class="map-container-home"></div>
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <script>
-    const projects = JSON.parse('{{ projects|escapejs }}');
-
-    const map = L.map('map').setView([52.2297, 21.0122], 6); 
+    const projects = {{ serialized_projects|safe }};
+    const map = L.map('map').setView([52.2297, 21.0122], 6);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -50,9 +50,12 @@
     }).addTo(map);
 
     projects.forEach(project => {
-        const { latitude, longitude, name, description } = project.fields;
-        const marker = L.marker([latitude, longitude]).addTo(map);
-        marker.bindPopup(`<h3>${name}</h3><p>${description}</p>`);
+        const fields = project.fields; 
+        const { latitude, longitude, name, description } = fields;
+        if (latitude && longitude) {
+            const marker = L.marker([latitude, longitude]).addTo(map);
+            marker.bindPopup(`<h3>${name}</h3><p>${description}</p>`);
+        }
     });
 </script>
 {% endblock %}

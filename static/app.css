@@ -23,7 +23,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 70px);
     border-radius: 20px;
     margin: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
@@ -401,7 +401,6 @@ select:focus {
     font-weight: bold;
     color: #333;
 }
-
 /* Home Page Styles */
 .home-container {
     padding: 20px;
@@ -419,17 +418,16 @@ select:focus {
 }
 
 .home-sections {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 100%;
-    max-width: 900px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    width: 100%; 
+    max-width: 1200px; 
 }
 
 .employees-section, .projects-section {
-    flex: 1;
     background-color: #C7F0F4;
-    padding: 15px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -447,4 +445,60 @@ select:focus {
     font-size: 1.1rem;
 }
 
+@media (max-width: 768px) {
+    .home-sections {
+        grid-template-columns: 1fr; 
+    }
+}
 
+/* Klikalne sekcje */
+.clickable-section {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    background-color: #C7F0F4;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.clickable-section:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.clickable-section h2 {
+    font-size: 1.5rem;
+    color: #0B2F9F;
+    margin-bottom: 10px;
+}
+
+.clickable-section ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    color: #004182;
+    font-size: 1.1rem;
+}
+
+.map-container-home {
+    height: 400px;
+    margin-top: 20px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+
+/* map */
+.map-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #ffffff; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
