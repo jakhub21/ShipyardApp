@@ -60,8 +60,8 @@ class Employee(models.Model):
         return reverse("employee_detail", args=[self.slug])
     
 
-    # def __str__(self):
-    #     return f"{self.first_name} {self.last_name} | status: {self.status} | zawód: {self.position}"
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
     
 class Certificate(models.Model):
     name = models.CharField(max_length=100)

@@ -10,18 +10,15 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-    // Parsowanie JSON-u przekazanego z Django
     const projects = JSON.parse('{{ projects|escapejs }}');
 
-    const map = L.map('map').setView([52.2297, 21.0122], 6); // Domyślnie Warszawa
+    const map = L.map('map').setView([52.2297, 21.0122], 6); 
 
-    // Warstwa mapy
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Dodawanie markerów dla projektów
     projects.forEach(project => {
         const { latitude, longitude, name, description } = project.fields;
         const marker = L.marker([latitude, longitude]).addTo(map);

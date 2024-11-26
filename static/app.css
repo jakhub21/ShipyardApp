@@ -402,3 +402,49 @@ select:focus {
     color: #333;
 }
 
+/* Home Page Styles */
+.home-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.home-title {
+    font-size: 2rem;
+    color: #0B2F9F;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.home-sections {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+.employees-section, .projects-section {
+    flex: 1;
+    background-color: #C7F0F4;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.employees-section h2, .projects-section h2 {
+    font-size: 1.5rem;
+    color: #0B2F9F;
+    margin-bottom: 10px;
+}
+
+.employees-section ul, .projects-section ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    color: #004182;
+    font-size: 1.1rem;
+}
+
+

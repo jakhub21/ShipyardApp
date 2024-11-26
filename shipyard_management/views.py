@@ -8,7 +8,16 @@ from django.core.serializers import serialize
 
 
 def home(request):
-    return render(request, 'shipyard_management/home.html')
+    employees = Employee.objects.all()[:5]
+    displayed_projects = Project.objects.all()[:5]
+    all_projects = Project.objects.all()
+    serialized_projects = serialize('json', all_projects)
+
+    return render(request, 'shipyard_management/home.html', {
+        'employees': employees,
+        'projects': displayed_projects,
+        'serialized_projects': serialized_projects
+    })
 
 def employee_list(request):
     query = request.GET.get('q')

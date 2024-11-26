@@ -1,14 +1,58 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}
+    Home - Shipyard Management System
+{% endblock %}
 
 {% block content %}
-    <h1 class="title">Shipyard Management System</h1>
-    <nav>
-        <ul>
-            <li><a href="{% url 'employee_list' %}">View Employees</a></li>
-            <!-- Add more buttons to other views -->
-        </ul>
-    </nav>
+<div class="home-container">
+    <h1 class="home-title">Shipyard Management System</h1>
+    <div class="home-sections">
+        <div class="employees-section">
+            <h2>Employees:</h2>
+            <ul>
+                {% for employee in employees %}
+                    <li>{{ employee.first_name }} {{ employee.last_name }}</li>
+                {% endfor %}
+            </ul>
+            {% if employees|length > 5 %}
+                <p>...and more</p>
+            {% endif %}
+        </div>
+
+        <div class="projects-section">
+            <h2>Projects:</h2>
+            <ul>
+                {% for project in projects %}
+                    <li>{{ project.name }}</li>
+                {% endfor %}
+            </ul>
+            {% if projects|length > 5 %}
+                <p>...and more</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div id="map" style="height: 400px; margin-top: 20px;"></div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    const projects = JSON.parse('{{ projects|escapejs }}');
+
+    const map = L.map('map').setView([52.2297, 21.0122], 6); 
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    projects.forEach(project => {
+        const { latitude, longitude, name, description } = project.fields;
+        const marker = L.marker([latitude, longitude]).addTo(map);
+        marker.bindPopup(`<h3>${name}</h3><p>${description}</p>`);
+    });
+</script>
 {% endblock %}
