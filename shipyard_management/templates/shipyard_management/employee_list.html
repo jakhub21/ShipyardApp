@@ -31,7 +31,7 @@
         </thead>
         <tbody>
             {% for employee in employees %}
-                <tr>
+                <tr class="clickable-row" data-href="{% url 'employee_detail' employee.slug %}">
                     <td>{{ employee.first_name }}</td>
                     <td>{{ employee.last_name }}</td>
                     <td>{{ employee.status }}</td>
@@ -54,6 +54,12 @@
 </div>
 
 <script>
+    document.querySelectorAll('.clickable-row').forEach(row => {
+        row.addEventListener('click', function () {
+            window.location = this.dataset.href;
+        });
+    });
+
     document.getElementById('search-input').addEventListener('input', function () {
         clearTimeout(window.searchTimeout);
         window.searchTimeout = setTimeout(function () {

@@ -6,13 +6,17 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ firstname }} {{ lastname }}</h1>
-    <p>Numer personalny: {{ personal_number }}</p>
-    <p>Numer telefonu: {{ phone_number }}</p>
-    <p>Numer konta bankowego: {{ bank_account_number }}</p>
-    <p>Adres: {{ address }}</p>
-    <p>Osoba kontaktowa: {{ contact_person }}</p>
-    <p>Zawód: {{ position }}</p>
-    <p>Projekt: {{ projects }}</p>
-    <p>Status: {{ status }}</p>
+    <div class="employee-details-container">
+        <h1 class="employee-name">{{ firstname }} {{ lastname }}</h1>
+        <div class="employee-info">
+            <p><span class="info-label">Numer personalny:</span> {{ personal_number }}</p>
+            <p><span class="info-label">Numer telefonu:</span> {{ phone_number }}</p>
+            <p><span class="info-label">Numer konta bankowego:</span> {{ bank_account_number }}</p>
+            <p><span class="info-label">Adres:</span> {{ address }}</p>
+            <p><span class="info-label">Osoba kontaktowa:</span> {{ contact_person }}</p>
+            <p><span class="info-label">Zawód:</span> {{ position }}</p>
+            <p><span class="info-label">Projekt:</span> {{ projects }}</p>
+            <p><span class="info-label">Status:</span> {{ status }}</p>
+        </div>
+    </div>
 {% endblock %}

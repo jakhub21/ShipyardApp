@@ -8,6 +8,12 @@ body {
     min-height: 100vh;
 }
 
+.title {
+    color: #0B2F9F;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
 /* Sidebar */
 .sidebar {
     width: 200px;
@@ -310,5 +316,89 @@ select:focus {
     .btn-primary {
         width: 100%;
     }
+}
+
+/* Employee detail */
+.employee-details-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.employee-name {
+    text-align: center;
+    color: #0B2F9F;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.employee-info p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Project detail */
+
+.project-details-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.project-title {
+    text-align: center;
+    color: #0B2F9F;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.project-info p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.assigned-employees-title {
+    font-size: 1.5rem;
+    color: #0B2F9F;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.assigned-employees-list {
+    list-style: none;
+    padding: 0;
+}
+
+.assigned-employees-list li {
+    margin: 5px 0;
+    font-size: 1.1rem;
+}
+
+.assigned-employees-list a {
+    text-decoration: none;
+    color: #0B2F9F;
+    transition: color 0.3s;
+}
+
+.assigned-employees-list a:hover {
+    color: #98DED9;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #333;
 }
 

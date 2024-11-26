@@ -6,18 +6,21 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ name }}</h1>
-    <p>Opis: {{ description }}</p>
-    <p>Data rozpoczęcia: {{ start_date }}</p>
-    <p>Data zakończenia: {{ end_date }}</p>
-    <p>Status: {{ status }}</p>
-    <h2>Pracownicy przypisani do projektu {{ name }}</h2>
-
-    <ul>
-        {% for employee in employees %}
-            <li><a href="{{ employee.get_absolute_url }}"></a>{{ employee.first_name }} {{ employee.last_name }}</a></li>
-        {% empty %}
-            <li>Brak pracowników przypisanych do projektu</li> 
-        {% endfor %}
-    </ul>
+    <div class="project-details-container">
+        <h1 class="project-title">{{ name }}</h1>
+        <div class="project-info">
+            <p><span class="info-label">Opis:</span> {{ description }}</p>
+            <p><span class="info-label">Data rozpoczęcia:</span> {{ start_date }}</p>
+            <p><span class="info-label">Data zakończenia:</span> {{ end_date }}</p>
+            <p><span class="info-label">Status:</span> {{ status }}</p>
+        </div>
+        <h2 class="assigned-employees-title">Pracownicy przypisani do projektu</h2>
+        <ul class="assigned-employees-list">
+            {% for employee in employees %}
+                <li><a href="{{ employee.get_absolute_url }}">{{ employee.first_name }} {{ employee.last_name }}</a></li>
+            {% empty %}
+                <li>Brak pracowników przypisanych do projektu</li> 
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
