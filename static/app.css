@@ -23,12 +23,14 @@ body {
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 70px); 
     border-radius: 20px;
     margin: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
-    
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky; 
+    top: 15px; 
 }
+
 
 .sidebar .nav {
     list-style: none;

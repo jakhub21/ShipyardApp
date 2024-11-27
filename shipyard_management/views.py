@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.http import HttpResponseNotAllowed
 from django.contrib import messages
 from django.core.serializers import serialize
+from django.core.paginator import Paginator
 
 
 def home(request):
@@ -21,6 +22,7 @@ def home(request):
 
 def employee_list(request):
     query = request.GET.get('q')
+    
     if query:
         employees = Employee.objects.filter(
             Q(first_name__icontains=query) | Q(last_name__icontains=query)
@@ -28,10 +30,15 @@ def employee_list(request):
     else:
         employees = Employee.objects.all()
 
+    paginator = Paginator(employees, 7)
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)  
+
     return render(request, 'shipyard_management/employee_list.html', {
-        'employees': employees,
-        'query': query
-        })
+        'employees': page_obj,  
+        'query': query,         
+        'page_obj': page_obj,   
+    })
 
 def employee_detail(request, slug):
     employee = get_object_or_404(Employee, slug=slug)
@@ -109,7 +116,7 @@ def delete_employee(request, slug):
     return HttpResponseNotAllowed(['POST'])
 
 def projects_list(request):
-    query = request.GET.get('q')
+    query = request.GET.get('q')  
     if query:
         projects = Project.objects.filter(
             Q(name__icontains=query) | Q(description__icontains=query)
@@ -117,10 +124,15 @@ def projects_list(request):
     else:
         projects = Project.objects.all()
 
+    paginator = Paginator(projects, 7)
+    page_number = request.GET.get('page') 
+    page_obj = paginator.get_page(page_number)  
+
     return render(request, 'shipyard_management/projects_list.html', {
-        'projects': projects,
-        'query': query
-        })
+        'projects': page_obj,  
+        'query': query,    
+        'page_obj': page_obj,    
+    })
 
 def project_detail(request, slug):
     project = get_object_or_404(Project, slug=slug)
