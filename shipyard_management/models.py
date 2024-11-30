@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse 
+from django.utils import timezone
 
 class Address(models.Model):
     street = models.CharField(max_length=100)
@@ -64,10 +65,22 @@ class Employee(models.Model):
         return f"{self.first_name} {self.last_name}"
     
 class Certificate(models.Model):
+    employee = models.ForeignKey(
+        Employee, 
+        on_delete=models.CASCADE, 
+        related_name='certificates' 
+    )
     name = models.CharField(max_length=100)
     issued_date = models.DateField()
     expiry_date = models.DateField(null=True, blank=True)
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+
+    def is_valid(self):
+        """
+        Sprawdza, czy certyfikat jest ważny (czy data wygaśnięcia nie minęła).
+        """
+        if self.expiry_date:
+            return self.expiry_date >= timezone.now().date()
+        return True
 
     def __str__(self):
         return f"{self.name} - {self.employee}"

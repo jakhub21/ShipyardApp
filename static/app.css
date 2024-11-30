@@ -348,6 +348,12 @@ select:focus {
     color: #333;
 }
 
+.employee-detail {
+    font-size: 2rem;
+    color: #0B2F9F;
+    margin-bottom: 10px;
+}
+
 /* Project detail */
 
 .project-details-container {
@@ -503,4 +509,74 @@ select:focus {
     border-radius: 15px; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+}
+
+/* certificate */
+.cert {
+    font-size: 2rem;
+    color: #0B2F9F;
+    margin-bottom: 10px;
+}
+
+.btn-add {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.btn-add:hover {
+    background-color: #45a049;
+}
+
+.btn-save {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-save:hover {
+    background-color: #0056b3;
+}
+
+.btn-edit-cert,
+.btn-delete-cert {
+    display: inline-block;
+    padding: 8px 12px; 
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-edit-cert {
+    background-color: #0B74E5; 
+}
+
+.btn-edit-cert:hover {
+    background-color: #0A5BB5; 
+}
+
+.btn-delete-cert {
+    background-color: #E53E3E; 
+}
+
+.btn-delete-cert:hover {
+    background-color: #C53030; 
 }

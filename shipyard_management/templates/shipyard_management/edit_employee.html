@@ -35,6 +35,34 @@
                 {{ contact_form.as_p }}
             </div>
         </section>
+
+        <section class="certificate-details">
+            <h2 class="section-title">Certificates</h2>
+            <div class="certificate-list">
+                <a href="{% url 'create_certificate' employee.slug %}?next={{ request.path }}" 
+               class="btn-add">Add Certificate</a>
+                {% if certificates %}
+                    <ul>
+                        {% for certificate in certificates %}
+                            <li>
+                                {{ certificate.name }} 
+                                (Issued: {{ certificate.issued_date }}, 
+                                Expires: {{ certificate.expiry_date|default:"N/A" }})
+                                <a href="{% url 'edit_certificate' employee.slug certificate.id %}" 
+                                   class="btn-edit-cert">Edit</a>
+                                <a href="{% url 'delete_certificate' employee.slug certificate.id %}" 
+                                   class="btn-delete-cert">Delete</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No certificates assigned.</p>
+                {% endif %}
+            </div>
+            
+        </section>
+        
+            
         
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Save</button>

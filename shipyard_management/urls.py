@@ -8,6 +8,11 @@ urlpatterns = [
     path('employees/edit/<slug:slug>/', views.edit_employee, name='edit_employee'),
     path('employees/delete/<slug:slug>/', views.delete_employee, name='delete_employee'),
     path('employees/<slug:slug>/', views.employee_detail, name='employee_detail'),
+    path('employees/<slug:slug>/certificates/new/', views.create_certificate, name='create_certificate'),
+
+    path('employees/<slug:slug>/certificates/edit/<int:id>/', views.edit_certificate, name='edit_certificate'),
+    path('employees/<slug:slug>/certificates/delete/<int:id>/', views.delete_certificate, name='delete_certificate'),
+    
     path('projects/', views.projects_list, name='projects_list'),
     path('projects/new/', views.create_project, name='project_create'),
     path('projects/edit/<slug:slug>/', views.edit_project, name='edit_project'),

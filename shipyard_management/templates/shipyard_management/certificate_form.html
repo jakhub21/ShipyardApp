@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Add certificate - {{ employee.first_name }} {{ employee.last_name }}
+{% endblock %}
+
+{% block content %}
+    <h1>Add certificate for {{ employee.first_name }} {{ employee.last_name }}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-save">Save</button>
+    </form>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Project, Employee, Address, ContactPerson
+from .models import Project, Employee, Address, ContactPerson, Certificate
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -20,3 +20,8 @@ class ContactPersonForm(forms.ModelForm):
     class Meta:
         model = ContactPerson
         fields = ['contact_first_name', 'contact_last_name', 'contact_email', 'contact_phone_number', 'relation_to_employee']
+
+class CertificateForm(forms.ModelForm):
+    class Meta:
+        model = Certificate
+        fields = ['name', 'issued_date', 'expiry_date']

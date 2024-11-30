@@ -2,21 +2,53 @@
 {% load static %}
 
 {% block title %}
-    {{ firstname }} {{ lastname }}
+    {{ employee.first_name }} {{ employee.last_name }}
 {% endblock %}
 
 {% block content %}
     <div class="employee-details-container">
-        <h1 class="employee-name">{{ firstname }} {{ lastname }}</h1>
+        <h1 class="employee-name">{{ employee.first_name }} {{ employee.last_name }}</h1>
+        <h2 class="employee-detail">Employee Details</h2>
         <div class="employee-info">
-            <p><span class="info-label">Numer personalny:</span> {{ personal_number }}</p>
-            <p><span class="info-label">Numer telefonu:</span> {{ phone_number }}</p>
-            <p><span class="info-label">Numer konta bankowego:</span> {{ bank_account_number }}</p>
-            <p><span class="info-label">Adres:</span> {{ address }}</p>
-            <p><span class="info-label">Osoba kontaktowa:</span> {{ contact_person }}</p>
-            <p><span class="info-label">Zawód:</span> {{ position }}</p>
-            <p><span class="info-label">Projekt:</span> {{ projects }}</p>
-            <p><span class="info-label">Status:</span> {{ status }}</p>
+            <p><span class="info-label">Personal number:</span> {{ employee.personal_number }}</p>
+            <p><span class="info-label">Phone number:</span> {{ employee.phone_number }}</p>
+            <p><span class="info-label">Bank account:</span> {{ employee.bank_account_number }}</p>
+            <p><span class="info-label">Adres:</span> {{ employee.address }}</p>
+            <p><span class="info-label">Contact person:</span> {{ employee.contact_person }}</p>
+            <p><span class="info-label">Profession:</span> {{ employee.position }}</p>
+            <p><span class="info-label">Project:</span> {{ employee.projects }}</p>
+            <p><span class="info-label">Status:</span> {{ employee.status }}</p>
+        </div>
+        <h2 class="employee-detail">Address</h2>
+        <div class="employee-info">
+            <p><span class="info-label">Street:</span> {{ address.street }}</p>
+            <p><span class="info-label">City:</span> {{ address.city }}</p>
+            <p><span class="info-label">Country:</span> {{ address.country }}</p>
+            <p><span class="info-label">Postal code:</span> {{ address.postal_code }}</p>
+        </div>
+        <h2 class="employee-detail">Contact Person</h2>
+        <div class="employee-info">
+            <p><span class="info-label">First Name:</span> {{ contact_person.contact_first_name }}</p>
+            <p><span class="info-label">Last Name:</span> {{ contact_person.contact_last_name }}</p>
+            <p><span class="info-label">Phone Number:</span> {{ contact_person.contact_phone_number }}</p>
+            <p><span class="info-label">Email:</span> {{ contact_person.contact_email }}</p>
+            <p><span class="info-label">Relation to employee:</span> {{ contact_person.relation_to_employee }}</p>
+        </div>
+
+
+        <div class="certificates-section">
+            <h2 class="cert">Certificates</h2>
+            <a href="{% url 'create_certificate' employee.slug %}?next={{ request.path }}" class="btn-add">Add Certificate</a>
+            <ul class="certificates-list">
+                {% for certificate in certificates %}
+                    <li>
+                        {{ certificate.name }} - Issued: {{ certificate.issued_date }}
+                        {% if certificate.expiry_date %} (Valid until: {{ certificate.expiry_date }}) {% endif %}
+                    </li>
+                {% empty %}
+                    <li>No Certificates</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
