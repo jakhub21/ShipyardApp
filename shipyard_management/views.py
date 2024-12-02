@@ -67,16 +67,28 @@ def create_employee(request):
             employee.contact_person = contact_person
             employee.save()
 
+            certificates = request.session.pop('new_employee_certificates', [])
+            for cert_data in certificates:
+                Certificate.objects.create(
+                    employee=employee,
+                    name=cert_data['name'],
+                    issued_date=cert_data['issued_date'],
+                    expiry_date=cert_data['expiry_date'],
+                )
+
             return redirect('employee_list')  
     else:
         employee_form = EmployeeForm()
         address_form = AddressForm()
         contact_person_form = ContactPersonForm()
 
+    certificates = request.session.get('new_employee_certificates', [])
+
     return render(request, 'shipyard_management/employee_form.html', {
         'employee_form': employee_form,
         'address_form': address_form,
-        'contact_person_form': contact_person_form
+        'contact_person_form': contact_person_form,
+        'certificates': certificates,
     })
 
 def edit_employee(request, slug):
@@ -183,26 +195,31 @@ def map_view(request):
     projects_json = serialize('json', projects)
     return render(request, 'shipyard_management/map.html', {'projects': projects_json})
 
-def create_certificate(request, slug):
-    employee = get_object_or_404(Employee, slug=slug)
-    
-    next_url = request.GET.get('next', '/')
+def create_certificate(request, slug=None):
+    previous_url = request.GET.get('next', None)
     
     if request.method == "POST":
         form = CertificateForm(request.POST)
         if form.is_valid():
-            certificate = form.save(commit=False)
-            certificate.employee = employee
-            certificate.save()
-            
-            if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
-                return redirect(next_url)
-            return redirect('employee_detail', slug=employee.slug)
+            if slug:
+                employee = get_object_or_404(Employee, slug=slug)
+                certificate = form.save(commit=False)
+                certificate.employee = employee
+                certificate.save()
+            else:
+                certificates = request.session.get('new_employee_certificates', [])
+                certificates.append({
+                    'name': form.cleaned_data['name'],
+                    'issued_date': form.cleaned_data['issued_date'].isoformat(),  # Konwersja na string
+                    'expiry_date': form.cleaned_data['expiry_date'].isoformat() if form.cleaned_data['expiry_date'] else None,  # Konwersja na string lub None
+                })
+                request.session['new_employee_certificates'] = certificates
+
+            return redirect(previous_url if previous_url else 'employee_list')  
     else:
         form = CertificateForm()
 
     return render(request, 'shipyard_management/certificate_form.html', {
-        'employee': employee,
         'form': form,
     })
 

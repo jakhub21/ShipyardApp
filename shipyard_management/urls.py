@@ -8,6 +8,7 @@ urlpatterns = [
     path('employees/edit/<slug:slug>/', views.edit_employee, name='edit_employee'),
     path('employees/delete/<slug:slug>/', views.delete_employee, name='delete_employee'),
     path('employees/<slug:slug>/', views.employee_detail, name='employee_detail'),
+    path('certificates/new/', views.create_certificate, name='create_certificate_no_slug'),
     path('employees/<slug:slug>/certificates/new/', views.create_certificate, name='create_certificate'),
 
     path('employees/<slug:slug>/certificates/edit/<int:id>/', views.edit_certificate, name='edit_certificate'),

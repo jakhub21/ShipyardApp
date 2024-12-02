@@ -38,29 +38,32 @@
 
         <section class="certificate-details">
             <h2 class="section-title">Certificates</h2>
-            <div class="certificate-list">
-                <a href="{% url 'create_certificate' employee.slug %}?next={{ request.path }}" 
-               class="btn-add">Add Certificate</a>
+            <div class="certificates-section">
+                <a href="{% url 'create_certificate' employee.slug %}?next={{ request.path }}" class="btn-add">Add Certificate</a>
                 {% if certificates %}
-                    <ul>
+                    <ul class="certificates-list">
                         {% for certificate in certificates %}
                             <li>
-                                {{ certificate.name }} 
-                                (Issued: {{ certificate.issued_date }}, 
-                                Expires: {{ certificate.expiry_date|default:"N/A" }})
-                                <a href="{% url 'edit_certificate' employee.slug certificate.id %}" 
-                                   class="btn-edit-cert">Edit</a>
-                                <a href="{% url 'delete_certificate' employee.slug certificate.id %}" 
-                                   class="btn-delete-cert">Delete</a>
+                                <div class="certificate-info">
+                                    <span>{{ certificate.name }}</span>
+                                    <small>
+                                        Issued: {{ certificate.issued_date }}
+                                        {% if certificate.expiry_date %} (Valid until: {{ certificate.expiry_date }}) {% endif %}
+                                    </small>
+                                </div>
+                                <div class="certificate-actions">
+                                    <a href="{% url 'edit_certificate' employee.slug certificate.id %}" class="btn-edit-cert">Edit</a>
+                                    <a href="{% url 'delete_certificate' employee.slug certificate.id %}" class="btn-delete-cert">Delete</a>
+                                </div>
                             </li>
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <p>No certificates assigned.</p>
+                    <p class="no-certificates">No Certificates</p>
                 {% endif %}
             </div>
-            
         </section>
+        
         
             
         

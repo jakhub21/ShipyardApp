@@ -1,29 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="edit-employee-container">
-      <h2 class="edit-employee-title">Create New Worker</h2>
-      <form method="post" class="employee-form">
-          {% csrf_token %}
+<div class="edit-employee-container">
+    <h2 class="edit-employee-title">Create New Worker</h2>
+    <form method="post" class="employee-form">
+        {% csrf_token %}
 
-          <div class="section-title">Employee Details</div>
-          <div class="form-group">
-              {{ employee_form.as_p }}
-          </div>
+        <h2 class="section-title">Certificates</h2>
+        <div class="certificates-section">
+            <a href="{% url 'create_certificate_no_slug' %}?next={{ request.path }}" class="btn-add">Add Certificate</a>
+            <ul class="certificates-list">
+                {% for certificate in certificates %}
+                    <li>
+                        <span>{{ certificate.name }}</span>
+                        <small>
+                            Issued: {{ certificate.issued_date }}
+                            {% if certificate.expiry_date %} (Valid until: {{ certificate.expiry_date }}) {% endif %}
+                        </small>
+                    </li>
+                {% empty %}
+                    <li class="no-certificates">No Certificates</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-          <div class="section-title">Address Details</div>
-          <div class="form-group">
-              {{ address_form.as_p }}
-          </div>
+        <div class="section-title">Employee Details</div>
+        <div class="form-group">
+            {{ employee_form.as_p }}
+        </div>
 
-          <div class="section-title">Contact Person Details</div>
-          <div class="form-group">
-              {{ contact_person_form.as_p }}
-          </div>
+        <div class="section-title">Address Details</div>
+        <div class="form-group">
+            {{ address_form.as_p }}
+        </div>
 
-          <div class="form-actions">
-              <button type="submit" class="btn-primary">Create New Worker</button>
-          </div>
-      </form>
-  </div>
+        <div class="section-title">Contact Person Details</div>
+        <div class="form-group">
+            {{ contact_person_form.as_p }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Create New Worker</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

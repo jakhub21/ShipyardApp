@@ -580,3 +580,72 @@ select:focus {
 .btn-delete-cert:hover {
     background-color: #C53030; 
 }
+
+.certificates-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.certificates-section h2.section-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.certificates-section .btn-add {
+    display: inline-block;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.certificates-section .btn-add:hover {
+    background-color: #0056b3;
+}
+
+.certificates-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.certificates-list li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.3s ease;
+}
+
+.certificates-list li:hover {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.certificates-list li span {
+    font-weight: bold;
+    color: #333;
+}
+
+.certificates-list li small {
+    color: #777;
+}
+
+.no-certificates {
+    font-style: italic;
+    color: #999;
+    margin: 10px 0;
+}

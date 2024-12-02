@@ -35,18 +35,20 @@
             <p><span class="info-label">Relation to employee:</span> {{ contact_person.relation_to_employee }}</p>
         </div>
 
-
+        <h2 class="cert">Certificates</h2>
         <div class="certificates-section">
-            <h2 class="cert">Certificates</h2>
             <a href="{% url 'create_certificate' employee.slug %}?next={{ request.path }}" class="btn-add">Add Certificate</a>
             <ul class="certificates-list">
                 {% for certificate in certificates %}
                     <li>
-                        {{ certificate.name }} - Issued: {{ certificate.issued_date }}
-                        {% if certificate.expiry_date %} (Valid until: {{ certificate.expiry_date }}) {% endif %}
+                        <span>{{ certificate.name }}</span>
+                        <small>
+                            Issued: {{ certificate.issued_date }}
+                            {% if certificate.expiry_date %} (Valid until: {{ certificate.expiry_date }}) {% endif %}
+                        </small>
                     </li>
                 {% empty %}
-                    <li>No Certificates</li>
+                    <li class="no-certificates">No Certificates</li>
                 {% endfor %}
             </ul>
         </div>
