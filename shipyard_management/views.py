@@ -93,31 +93,29 @@ def create_employee(request):
 
 def edit_employee(request, slug):
     employee = get_object_or_404(Employee, slug=slug)
-    address = employee.address
-    contact = employee.contact_person
-    certificates = employee.certificates.all() 
+    certificates = employee.certificates.all()
 
     if request.method == 'POST':
         form = EmployeeForm(request.POST, instance=employee)
-        address_form = AddressForm(request.POST, instance=address)
-        contact_form = ContactPersonForm(request.POST, instance=contact)
+        address_form = AddressForm(request.POST, instance=employee.address)
+        contact_form = ContactPersonForm(request.POST, instance=employee.contact_person)
 
         if form.is_valid() and address_form.is_valid() and contact_form.is_valid():
             form.save()
             address_form.save()
             contact_form.save()
-            return redirect('employee_list') 
+            return redirect('employee_detail', slug=employee.slug)
     else:
         form = EmployeeForm(instance=employee)
-        address_form = AddressForm(instance=address)
-        contact_form = ContactPersonForm(instance=contact)
+        address_form = AddressForm(instance=employee.address)
+        contact_form = ContactPersonForm(instance=employee.contact_person)
 
     return render(request, 'shipyard_management/edit_employee.html', {
         'form': form,
         'address_form': address_form,
         'contact_form': contact_form,
         'employee': employee,
-        'certificates': certificates,  
+        'certificates': certificates,
     })
 
 def delete_employee(request, slug):
@@ -248,4 +246,5 @@ def delete_certificate(request, slug, id):
     
     return render(request, 'shipyard_management/confirm_delete.html', {
         'object': certificate,
+        'employee': certificate.employee, 
     })
