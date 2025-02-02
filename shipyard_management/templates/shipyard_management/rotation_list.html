@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_filters %}
+
 
 {% block title %}
     Rotation
@@ -34,8 +36,46 @@
 
         <div class="rotation-stats-section">
             <h2>Statistics</h2>
-            <p>Placeholder for statistics.</p>
+            <ul class="stats-list">
+                {% for profession, count in profession_counts.items %}
+                    <li>
+                        <span class="profession-name">{{ profession }}</span>
+                        <span class="profession-count">{{ count }}</span>
+                    </li>
+                {% empty %}
+                    <li>No employees available.</li>
+                {% endfor %}
+            </ul>
         </div>
+        
     </div>
+    <div class="rotation-table-wrapper">
+        <h2 class="rotation-table-title">Employee Rotations Summary</h2>
+        <table class="rotation-table-list">
+            <thead>
+                <tr>
+                    <th class="sticky-column">Profession</th>
+                    {% for week in weeks %}
+                        <th>{{ week }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for profession, week_data in profession_week_counts.items %}
+                    <tr>
+                        <td class="sticky-column">{{ profession }}</td>
+                        {% for week in weeks %}
+                            <td>{{ week_data|get_item:week|default:"-" }}</td>
+                        {% endfor %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="{{ weeks|length|add:1 }}">No rotation data available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
 </div>
 {% endblock %}

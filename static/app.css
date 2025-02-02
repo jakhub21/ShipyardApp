@@ -739,16 +739,32 @@ select:focus {
 
 .rotation-content {
     display: flex;
-    gap: 20px;
+    max-width: 75vw;
+    justify-content: space-between;
+    align-items: flex-start;
     width: 100%;
+    gap: 20px;
 }
-
 .rotation-projects-list {
-    flex: 1;
-    background-color: #C7F0F4;
+    width: 50%;
+    background-color: #C7F0F4; /* Poprzedni kolor */
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: 350px; /* Gwarancja, że kontenery są równe */
+    display: flex;
+    flex-direction: column;
+}
+
+.rotation-stats-section {
+    width: 50%;
+    background-color: #F8F9FA;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
 }
 
 .rotation-projects-list h2 {
@@ -775,8 +791,9 @@ select:focus {
 }
 
 .rotation-pagination {
-    margin-top: 20px;
+    margin-top: auto; /* Przesuwa paginację na dół */
     text-align: center;
+    padding-top: 15px;
 }
 
 .rotation-btn-pagination {
@@ -794,13 +811,6 @@ select:focus {
     color: #0B2F9F;
 }
 
-.rotation-stats-section {
-    flex: 1;
-    background-color: #F5F5F5;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
 .rotation-calendar {
     padding: 15px;
@@ -921,9 +931,24 @@ select:focus {
     margin: 0 auto;
 }
 
+.rotation-table-list {
+    border-collapse: collapse;
+    width: auto;
+    min-width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
 
 .rotation-table th,
 .rotation-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    min-width: 110px;
+}
+
+.rotation-table-list th,
+.rotation-table-list td {
     padding: 10px;
     text-align: center;
     border: 1px solid #ddd;
@@ -936,6 +961,11 @@ select:focus {
     background: white;
     z-index: 2;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.rotation-table-list th:nth-child(1),
+.rotation-table-list td:nth-child(1) {
+    min-width: 120px;
 }
 
 .rotation-table th:nth-child(1),
@@ -983,6 +1013,13 @@ select:focus {
 
 .rotation-table th:nth-child(n+4),
 .rotation-table td:nth-child(n+4) {
+    min-width: 30px; 
+    padding: 6px 8px; 
+    font-size: 0.9rem; 
+}
+
+.rotation-table-list th:nth-child(n+1),
+.rotation-table-list td:nth-child(n+1) {
     min-width: 30px; 
     padding: 6px 8px; 
     font-size: 0.9rem; 

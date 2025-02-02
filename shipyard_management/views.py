@@ -206,12 +206,36 @@ def delete_project(request, slug):
 def rotation_list(request):
     projects = Project.objects.all()
 
-    paginator = Paginator(projects, 10)  
+    # Tworzymy paginację dla listy projektów
+    paginator = Paginator(projects, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    employees = Employee.objects.all()
+
+
+    profession_counts = defaultdict(int)
+    for employee in employees:
+        if employee.position: 
+            profession_counts[employee.position.title] += 1
+
+    # Pobieramy wszystkie rotacje
+    all_rotations = Rotation.objects.all().select_related("employee__position")
+
+    # Inicjalizujemy strukturę danych dla tabeli
+    profession_week_counts = defaultdict(lambda: defaultdict(int))
+
+    # Wypełniamy dane - liczymy ludzi z danej profesji w każdym tygodniu
+    for rotation in all_rotations:
+        profession = rotation.employee.position.title
+        profession_week_counts[profession][rotation.week] += 1
+
+    weeks = list(range(1, 53))  # Zakres tygodni 1-52
 
     return render(request, 'shipyard_management/rotation_list.html', {
         'projects': page_obj,  
+        'weeks': weeks,
+        'profession_week_counts': dict(profession_week_counts),
+        'profession_counts': dict(profession_counts),
     })
 
 def rotation_detail(request, slug, year):
