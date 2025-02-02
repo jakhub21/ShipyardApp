@@ -6,7 +6,7 @@ from django.forms import modelformset_factory
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['name', 'description', 'start_date', 'end_date', 'status', 'latitude', 'longitude', 'slug']
+        fields = ['name', 'description', 'start_date', 'status', 'latitude', 'longitude', 'slug']
 
 class EmployeeForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+{% load static custom_filters %}
+
+{% block title %}Rotations - {{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="rotation-container">
+    <h1 class="rotation-title">Rotations for {{ project.name }}</h1>
+
+    <div class="rotation-layout">
+        <!-- Lewa sekcja: Statystyki -->
+        <div class="rotation-stats">
+            <h2 class="stats-title">Project Statistics</h2>
+            <ul class="stats-list">
+                {% for profession, employees in employees_by_profession.items %}
+                    <li>
+                        <span class="profession-name">{{ profession }}</span>
+                        <span class="profession-count">{{ employees|length }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    
+        <!-- Prawa sekcja: Kalendarz -->
+        <div class="rotation-calendar">
+            <div id="calendar"></div>
+        </div>
+    </div>
+
+    <!-- 🔹 Przycisk otwierający modal -->
+    <button class="btn-add-employee" onclick="openEmployeeModal()">+ Add Employees</button>
+
+    <!-- 🔹 Modal do wyboru pracowników -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmployeeModal()">&times;</span>
+            <h2>Select Employees</h2>
+            <form id="addEmployeesForm">
+                <table class="employee-table">
+                    <thead>
+                        <tr>
+                            <th>Select</th>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Profession</th>
+                            <th>Current Project</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in all_employees %}
+                            <tr>
+                                <td><input type="checkbox" name="selected_employees" value="{{ employee.id }}"></td>
+                                <td>{{ employee.last_name }}</td>
+                                <td>{{ employee.first_name }}</td>
+                                <td>{{ employee.position.title }}</td>
+                                <td>{{ employee.current_project.name|default:"None" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5">No available employees</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn-save" onclick="saveEmployees()">Save</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="year-navigation">
+        <a href="{% url 'rotation_detail' project.slug year|add:"-1" %}" class="btn-year">&laquo; {{ year|add:"-1" }}</a>
+        <span class="current-year">{{ year }}</span>
+        <a href="{% url 'rotation_detail' project.slug year|add:"1" %}" class="btn-year">{{ year|add:"1" }} &raquo;</a>
+    </div>
+
+    <div class="rotation-table-wrapper">
+        <table class="rotation-table">
+            <thead>
+                <tr>
+                    <th class="sticky-column">Last Name</th>
+                    <th>First Name</th>
+                    <th>Profession</th>
+                    {% for week in weeks %}
+                        <th class="week-column">{{ week }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for profession, group in employees_by_profession.items %}
+                    <tr class="profession-header">
+                        <td colspan="{{ weeks|length|add:3 }}">{{ profession }}</td>
+                    </tr>
+    
+                    {% for employee in group %}
+                        <tr>
+                            <td class="sticky-column">{{ employee.last_name }}</td>
+                            <td>{{ employee.first_name }}</td>
+                            <td>{{ employee.position.title }}</td>
+                            {% for week in weeks %}
+                                <td class="rotation-cell {% if employee.id in rotation_dict and week in rotation_dict|dict_key:employee.id %}selected{% endif %}" 
+                                    data-employee="{{ employee.id }}" 
+                                    data-week="{{ week }}">
+                                    {% if employee.id in rotation_dict and week in rotation_dict|dict_key:employee.id %}
+                                        <span class="rotation-active">ON</span>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ JavaScript załadowany!");
+
+    /*** 🔹 Obsługa modala ***/
+    function openEmployeeModal() {
+        const modal = document.getElementById("employeeModal");
+        const rightSection = document.querySelector(".rotation-layout"); // Pobiera kontener prawej sekcji
+        const sidebar = document.querySelector(".sidebar"); // Pobiera szerokość nawigacji
+    
+        if (modal && rightSection && sidebar) {
+            const sidebarWidth = sidebar.offsetWidth || 200; // Ustala szerokość nawigacji
+            const rightSectionRect = rightSection.getBoundingClientRect();
+    
+            // Ustawienie modal tak, by był wyśrodkowany w prawej sekcji
+            modal.style.left = `${rightSectionRect.left + (rightSectionRect.width / 2)}px`;
+            modal.style.top = `${window.scrollY + 100}px`; // Przesuwa modal w dół, by nie zakrywał nagłówka
+            modal.style.transform = "translate(-50%, 0)";
+    
+            modal.style.display = "block"; // Pokazuje modal
+        }
+    }
+
+    function closeEmployeeModal() {
+        document.getElementById("employeeModal").style.display = "none";
+    }
+
+    document.querySelectorAll(".btn-add-employee").forEach(button => {
+        button.addEventListener("click", openEmployeeModal);
+    });
+
+    document.querySelector(".close").addEventListener("click", closeEmployeeModal);
+
+    /*** 🔹 Obsługa zapisywania pracowników ***/
+    function saveEmployees() {
+        let selectedEmployees = [];
+        document.querySelectorAll("input[name='selected_employees']:checked").forEach(checkbox => {
+            selectedEmployees.push(checkbox.value);
+        });
+    
+        if (selectedEmployees.length === 0) {
+            alert("Please select at least one employee.");
+            return;
+        }
+    
+        fetch("{% url 'assign_employees_to_project' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                employee_ids: selectedEmployees,
+                project_slug: "{{ project.slug }}"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Employees assigned successfully!");
+                closeEmployeeModal();
+                location.reload();  // ✅ Odśwież stronę po zapisaniu
+            } else {
+                alert("Error assigning employees: " + (data.error || "Unknown error"));
+                console.error("Server Error:", data.error);
+            }
+        })
+        .catch(error => {
+            alert("Request failed. Check console for details.");
+            console.error("Fetch error:", error);
+        });
+    }
+    
+
+    document.querySelector(".btn-save").addEventListener("click", saveEmployees);
+
+    /*** 🔹 Dynamiczna szerokość tabeli ***/
+    function adjustTableWidth() {
+        const wrapper = document.querySelector(".rotation-table-wrapper");
+        const table = document.querySelector(".rotation-table");
+        const weekColumns = document.querySelectorAll(".week-column");
+        const firstWeekCell = document.querySelector(".week-column");
+
+        if (!firstWeekCell) return;
+
+        const columnWidth = firstWeekCell.offsetWidth || 80;
+        const fixedColumnsWidth = 3 * columnWidth;
+        const availableWidth = wrapper.clientWidth - fixedColumnsWidth;
+        let maxWeeksVisible = Math.floor(availableWidth / columnWidth);
+
+        maxWeeksVisible = Math.max(1, Math.min(maxWeeksVisible, weekColumns.length));
+        table.style.minWidth = `${fixedColumnsWidth + maxWeeksVisible * columnWidth}px`;
+        table.style.maxWidth = "1600px";
+
+        console.log(`📏 Dostępna szerokość: ${wrapper.clientWidth}px, Widoczne tygodnie: ${maxWeeksVisible}`);
+    }
+
+    adjustTableWidth();
+    window.addEventListener("resize", adjustTableWidth);
+
+    /*** 🔹 Inicjalizacja FullCalendar ***/
+    const calendarEl = document.getElementById("calendar");
+    if (calendarEl) {
+        const today = new Date();
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: "dayGridMonth",
+            firstDay: 1,
+            headerToolbar: {
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth"
+            },
+            initialDate: today.toISOString().split("T")[0],
+            height: 250,
+            contentHeight: 250,
+            events: [
+                {
+                    title: "Dziś",
+                    start: today.toISOString().split("T")[0],
+                    display: "background",
+                    color: "#3b82f6"
+                }
+            ]
+        });
+        calendar.render();
+    }
+
+    /*** 🔹 Obsługa zaznaczania komórek tabeli ***/
+    document.querySelectorAll(".rotation-cell").forEach(cell => {
+        cell.addEventListener("click", function () {
+            let isSelected = this.classList.contains("selected");
+            this.classList.toggle("selected");
+
+            let employeeId = this.dataset.employee;
+            let weekNumber = this.dataset.week;
+            let projectSlug = "{{ project.slug }}";
+            let year = "{{ year }}";
+
+            fetch("/rotations/update/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    employee_id: employeeId,
+                    week: weekNumber,
+                    project_slug: projectSlug,
+                    year: year,
+                    active: !isSelected 
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("📡 Odpowiedź z serwera:", data);
+                if (data.success) {
+                    this.innerHTML = data.removed ? "-" : "ON";
+                    this.classList.toggle("selected", !data.removed);
+                }
+            })
+            .catch(error => console.error("❌ Błąd FETCH:", error));
+        });
+
+        // 🔹 Poprawne zaznaczenie komórek na starcie
+        if (cell.innerHTML.trim() === "ON") {
+            cell.classList.add("selected");
+        }
+    });
+
+    /*** 🔹 Zapewniamy, że tabela startuje od początku ***/
+    const tableWrapper = document.querySelector(".rotation-table-wrapper");
+    if (tableWrapper) {
+        tableWrapper.scrollLeft = 0;
+    }
+});
+</script>
+
+
+{% endblock %}

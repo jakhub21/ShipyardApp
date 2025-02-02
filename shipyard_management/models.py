@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse 
 from django.utils import timezone
+from datetime import date
 
 class Address(models.Model):
     street = models.CharField(max_length=100)
@@ -32,7 +33,6 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     start_date = models.DateField()
-    end_date = models.DateField()
     status = models.CharField(max_length=50)
     latitude = models.FloatField(null=True, blank=True) 
     longitude = models.FloatField(null=True, blank=True) 
@@ -93,3 +93,13 @@ class Document(models.Model):
 
     def __str__(self):
         return f"{self.type} for {self.employee}"
+
+class Rotation(models.Model):
+    employee = models.ForeignKey('Employee', on_delete=models.CASCADE) 
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)  
+    year = models.IntegerField()
+    week = models.IntegerField()
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.employee} - {self.project} - Week {self.week} ({self.year})"

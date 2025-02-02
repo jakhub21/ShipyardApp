@@ -11,9 +11,9 @@
         <div class="project-info">
             <p><span class="info-label">Opis:</span> {{ description }}</p>
             <p><span class="info-label">Data rozpoczęcia:</span> {{ start_date }}</p>
-            <p><span class="info-label">Data zakończenia:</span> {{ end_date }}</p>
             <p><span class="info-label">Status:</span> {{ status }}</p>
         </div>
+        
         <h2 class="assigned-employees-title">Pracownicy przypisani do projektu</h2>
         <ul class="assigned-employees-list">
             {% for employee in employees %}
@@ -22,5 +22,95 @@
                 <li>Brak pracowników przypisanych do projektu</li> 
             {% endfor %}
         </ul>
+
+        <!-- 🔹 Przycisk do otwierania modala -->
+        <button class="btn-add-employee" onclick="openEmployeeModal()">+ Add Employees</button>
+
+        <!-- 🔹 Modal - teraz umieszczony wewnątrz kontenera -->
+        <div id="employeeModal" class="modal modal-project">
+            <div class="modal-content">
+                <span class="close" onclick="closeEmployeeModal()">&times;</span>
+                <h2>Select Employees</h2>
+                <form id="addEmployeesForm">
+                    <table class="employee-table">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Profession</th>
+                                <th>Current Project</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for employee in all_employees %}
+                                <tr>
+                                    <td><input type="checkbox" name="selected_employees" value="{{ employee.id }}"></td>
+                                    <td>{{ employee.last_name }}</td>
+                                    <td>{{ employee.first_name }}</td>
+                                    <td>{{ employee.position.title }}</td>
+                                    <td>{{ employee.current_project.name|default:"None" }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5">No available employees</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn-save" onclick="saveEmployees()">Save</button>
+                </form>
+            </div>
+        </div>
     </div>
+
+
+    <script>
+        function openEmployeeModal() {
+            document.getElementById("employeeModal").style.display = "block";
+        }
+    
+        function closeEmployeeModal() {
+            document.getElementById("employeeModal").style.display = "none";
+        }
+    
+        function saveEmployees() {
+            let selectedEmployees = [];
+            document.querySelectorAll("input[name='selected_employees']:checked").forEach(checkbox => {
+                selectedEmployees.push(checkbox.value);
+            });
+    
+            if (selectedEmployees.length === 0) {
+                alert("Please select at least one employee.");
+                return;
+            }
+    
+            let projectSlug = "{{ project.slug }}";  // Pobieramy slug projektu
+    
+            fetch("{% url 'assign_employees_to_project' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    employee_ids: selectedEmployees,
+                    project_slug: projectSlug
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Employees assigned successfully!");
+                    closeEmployeeModal();
+                    location.reload();  // Odśwież stronę po zapisaniu
+                } else {
+                    alert("Error assigning employees: " + data.error);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+        
+    </script>
+
 {% endblock %}

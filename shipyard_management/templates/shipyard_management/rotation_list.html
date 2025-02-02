@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Rotation
+{% endblock %}
+
+{% block content %}
+<div class="rotation-container">
+    <h1 class="rotation-title">Rotations</h1>
+    
+    <div class="rotation-content">
+        <div class="rotation-projects-list">
+            <h2>Projects</h2>
+            <ul>
+                {% for project in projects %}
+                {% now "Y" as current_year %}
+                    <li><a href="{% url 'rotation_detail' project.slug current_year %}">{{ project.name }}</a></li>
+                {% empty %}
+                    <li>No projects found.</li>
+                {% endfor %}
+            </ul>            
+
+            <div class="rotation-pagination">
+                {% if projects.has_previous %}
+                    <a href="?page={{ projects.previous_page_number }}" class="rotation-btn-pagination">Previous</a>
+                {% endif %}
+                <span>Page {{ projects.number }} of {{ projects.paginator.num_pages }}</span>
+                {% if projects.has_next %}
+                    <a href="?page={{ projects.next_page_number }}" class="rotation-btn-pagination">Next</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="rotation-stats-section">
+            <h2>Statistics</h2>
+            <p>Placeholder for statistics.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

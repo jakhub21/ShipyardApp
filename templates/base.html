@@ -38,6 +38,14 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{% url 'rotation_list' %}">
+                        <svg class="icon">
+                            <img src="{% static 'icons/rotation.svg' %}" alt="Rotation Icon" class="nav-icon" width="35" height="35">
+                        </svg>
+                        Rotations
+                    </a>
+                </li>
+                <li>
                     <a href="{% url 'map_view' %}">
                         <svg class="icon">
                             <img src="{% static 'icons/map.svg' %}" alt="Map Icon" class="nav-icon" width="35" height="35">
@@ -47,7 +55,6 @@
                 </li>
             </ul>
             <div class="footer">
-                {% comment %} <a href="{% url 'settings' %}">Settings</a> {% endcomment %}
                 {% if user.is_authenticated %}
                     <a href="{% url 'logout' %}">
                         <svg class="icon">
