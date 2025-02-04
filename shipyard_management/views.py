@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.utils.timezone import now
 from django.db import models
+from django.utils.text import slugify
 
 def home(request):
     employees = Employee.objects.all()[:5]
@@ -71,6 +72,15 @@ def create_employee(request):
             employee = employee_form.save(commit=False)
             employee.address = address
             employee.contact_person = contact_person
+
+            employee.slug = slugify(f"{employee.first_name}-{employee.last_name}-{employee.personal_number}")
+
+            original_slug = employee.slug
+            counter = 1
+            while Employee.objects.filter(slug=employee.slug).exists():
+                employee.slug = f"{original_slug}-{counter}"
+                counter += 1
+
             employee.save()
 
             certificates = request.session.pop('new_employee_certificates', [])
@@ -82,7 +92,7 @@ def create_employee(request):
                     expiry_date=cert_data['expiry_date'],
                 )
 
-            return redirect('employee_list')  
+            return redirect('employee_list')
     else:
         employee_form = EmployeeForm()
         address_form = AddressForm()
@@ -96,6 +106,7 @@ def create_employee(request):
         'contact_person_form': contact_person_form,
         'certificates': certificates,
     })
+
 
 def edit_employee(request, slug):
     employee = get_object_or_404(Employee, slug=slug)
@@ -154,10 +165,8 @@ def project_detail(request, slug):
     project = get_object_or_404(Project, slug=slug)
     employees = Employee.objects.filter(projects=project)
 
-    # Pobieramy pracowników, którzy NIE są w tym projekcie
     all_employees = Employee.objects.exclude(projects=project).prefetch_related("position", "projects")
 
-    # Dodajemy bieżący projekt każdego pracownika
     for employee in all_employees:
         employee.current_project = employee.projects if employee.projects else "-"
 
@@ -175,12 +184,23 @@ def create_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('projects_list')  
+            project = form.save(commit=False)
+
+            project.slug = slugify(project.name)
+
+            original_slug = project.slug
+            counter = 1
+            while Project.objects.filter(slug=project.slug).exists():
+                project.slug = f"{original_slug}-{counter}"
+                counter += 1
+
+            project.save()
+            return redirect('projects_list')
     else:
         form = ProjectForm()
 
     return render(request, 'shipyard_management/project_form.html', {'form': form})
+
 
 def edit_project(request, slug):
     project = get_object_or_404(Project, slug=slug)
@@ -206,7 +226,6 @@ def delete_project(request, slug):
 def rotation_list(request):
     projects = Project.objects.all()
 
-    # Tworzymy paginację dla listy projektów
     paginator = Paginator(projects, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -218,18 +237,15 @@ def rotation_list(request):
         if employee.position: 
             profession_counts[employee.position.title] += 1
 
-    # Pobieramy wszystkie rotacje
     all_rotations = Rotation.objects.all().select_related("employee__position")
 
-    # Inicjalizujemy strukturę danych dla tabeli
     profession_week_counts = defaultdict(lambda: defaultdict(int))
 
-    # Wypełniamy dane - liczymy ludzi z danej profesji w każdym tygodniu
     for rotation in all_rotations:
         profession = rotation.employee.position.title
         profession_week_counts[profession][rotation.week] += 1
 
-    weeks = list(range(1, 53))  # Zakres tygodni 1-52
+    weeks = list(range(1, 53))  
 
     return render(request, 'shipyard_management/rotation_list.html', {
         'projects': page_obj,  
@@ -242,13 +258,11 @@ def rotation_detail(request, slug, year):
     project = get_object_or_404(Project, slug=slug)
     employees = Employee.objects.filter(projects=project).order_by("position__title", "last_name")
 
-    # Pobranie wszystkich pracowników spoza projektu
     all_employees = Employee.objects.exclude(projects=project).prefetch_related("projects", "position")
 
     for employee in all_employees:
-        # 🔹 Sprawdzamy, czy `projects` jest ManyToManyField
         if hasattr(employee, "projects") and isinstance(employee._meta.get_field("projects"), models.ManyToManyField):
-            projects_qs = employee.projects.all()  # ✅ Jeśli ManyToManyField, używamy `.all()`
+            projects_qs = employee.projects.all()  
             employee.current_project = projects_qs.first() if projects_qs.exists() else "-"
         else:
             employee.current_project = employee.projects if employee.projects else "-"
@@ -301,22 +315,20 @@ def assign_employees_to_project(request):
             employee_ids = data.get("employee_ids", [])
             project_slug = data.get("project_slug")
 
-            print(f"🔹 Otrzymany `project_slug`: {project_slug}")  # 🛠 Debugowanie
-            print(f"🔹 Otrzymane `employee_ids`: {employee_ids}")  # 🛠 Debugowanie
+            print(f"🔹 Otrzymany `project_slug`: {project_slug}")  
+            print(f"🔹 Otrzymane `employee_ids`: {employee_ids}")  
 
-            # Pobieramy projekt na podstawie sluga
             project = get_object_or_404(Project, slug=project_slug)
 
-            # Pobieramy pracowników i przypisujemy im nowy projekt
             employees = Employee.objects.filter(id__in=employee_ids)
             for employee in employees:
-                employee.projects = project  # Zmiana przypisanego projektu
-                employee.save()  # Zapisujemy zmianę w bazie
+                employee.projects = project  
+                employee.save()  
 
             return JsonResponse({"success": True, "message": "Employees assigned successfully."})
 
         except Exception as e:
-            print(f"⚠️ Błąd: {e}")  # 🛠 Debugowanie błędu
+            print(f"⚠️ Błąd: {e}") 
             return JsonResponse({"success": False, "error": str(e)})
 
     return JsonResponse({"success": False, "error": "Invalid request"})
@@ -330,13 +342,11 @@ def update_rotation(request):
             week = int(data.get("week"))
             project_slug = data.get("project_slug")
             year = int(data.get("year"))
-            active = data.get("active")  # Nowa poprawka!
+            active = data.get("active")  
 
-            # Pobieramy obiekty Employee i Project
             employee = Employee.objects.get(id=employee_id)
             project = Project.objects.get(slug=project_slug)
 
-            # Jeśli `active` == True -> dodaj do bazy
             if active:
                 rotation, created = Rotation.objects.get_or_create(
                     employee=employee,
@@ -346,7 +356,6 @@ def update_rotation(request):
                 )
                 return JsonResponse({"success": True, "added": True, "week": week})
             else:
-                # Jeśli `active` == False -> usuń z bazy
                 deleted_count, _ = Rotation.objects.filter(
                     employee=employee,
                     project=project,
@@ -380,7 +389,7 @@ def create_certificate(request, slug=None):
                 certificates = request.session.get('new_employee_certificates', [])
                 certificates.append({
                     'name': form.cleaned_data['name'],
-                    'issued_date': form.cleaned_data['issued_date'].isoformat(),  # Konwersja na string
+                    'issued_date': form.cleaned_data['issued_date'].isoformat(),  
                     'expiry_date': form.cleaned_data['expiry_date'].isoformat() if form.cleaned_data['expiry_date'] else None,  # Konwersja na string lub None
                 })
                 request.session['new_employee_certificates'] = certificates

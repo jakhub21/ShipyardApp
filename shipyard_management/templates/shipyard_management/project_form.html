@@ -61,28 +61,46 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <script>
-    const defaultLatitude = {{ form.latitude.value|default:52.2297 }};
-    const defaultLongitude = {{ form.longitude.value|default:21.0122 }};
-    const map = L.map('map').setView([defaultLatitude, defaultLongitude], 6);
+    document.addEventListener("DOMContentLoaded", function () {
+        const projectNameInput = document.querySelector("#id_name");
+        const slugInput = document.querySelector("#id_slug");
+    
+        function updateSlug() {
+            const projectName = projectNameInput.value.trim().toLowerCase();
+    
+            if (projectName) {
+                let slug = projectName;
+                slug = slug.normalize("NFD").replace(/[\u0300-\u036f]/g, "");  
+                slug = slug.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9-]/g, ""); 
+                slugInput.value = slug;
+            }
+        }
+    
+        projectNameInput.addEventListener("input", updateSlug);
+    
+        const defaultLatitude = {{ form.latitude.value|default:52.2297 }};
+        const defaultLongitude = {{ form.longitude.value|default:21.0122 }};
+        const map = L.map('map').setView([defaultLatitude, defaultLongitude], 6);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-    let marker = L.marker([defaultLatitude, defaultLongitude], { draggable: true }).addTo(map);
+        let marker = L.marker([defaultLatitude, defaultLongitude], { draggable: true }).addTo(map);
 
-    marker.on('dragend', function (e) {
-        const latLng = marker.getLatLng();
-        document.querySelector('[name="latitude"]').value = latLng.lat;
-        document.querySelector('[name="longitude"]').value = latLng.lng;
-    });
+        marker.on('dragend', function (e) {
+            const latLng = marker.getLatLng();
+            document.querySelector('[name="latitude"]').value = latLng.lat;
+            document.querySelector('[name="longitude"]').value = latLng.lng;
+        });
 
-    map.on('click', function (e) {
-        const { lat, lng } = e.latlng;
-        marker.setLatLng([lat, lng]);
-        document.querySelector('[name="latitude"]').value = lat;
-        document.querySelector('[name="longitude"]').value = lng;
+        map.on('click', function (e) {
+            const { lat, lng } = e.latlng;
+            marker.setLatLng([lat, lng]);
+            document.querySelector('[name="latitude"]').value = lat;
+            document.querySelector('[name="longitude"]').value = lng;
+        });
     });
 </script>
 {% endblock %}

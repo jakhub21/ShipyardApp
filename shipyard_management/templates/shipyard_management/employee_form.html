@@ -44,4 +44,31 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const firstNameInput = document.querySelector("#id_first_name");
+        const lastNameInput = document.querySelector("#id_last_name");
+        const personalNumberInput = document.querySelector("#id_personal_number");
+        const slugInput = document.querySelector("#id_slug");
+    
+        function updateSlug() {
+            const firstName = firstNameInput.value.trim().toLowerCase();
+            const lastName = lastNameInput.value.trim().toLowerCase();
+            const personalNumber = personalNumberInput.value.trim();
+    
+            if (firstName && lastName && personalNumber) {
+                let slug = `${firstName}-${lastName}-${personalNumber}`;
+                slug = slug.normalize("NFD").replace(/[\u0300-\u036f]/g, "");  // Usuwa polskie znaki diakrytyczne
+                slug = slug.replace(/\s+/g, "-").replace(/[^a-zA-Z0-9-]/g, ""); // Zamienia spacje na "-"
+                slugInput.value = slug;
+            }
+        }
+    
+        firstNameInput.addEventListener("input", updateSlug);
+        lastNameInput.addEventListener("input", updateSlug);
+        personalNumberInput.addEventListener("input", updateSlug);
+    });
+    </script>
+    
 {% endblock %}
